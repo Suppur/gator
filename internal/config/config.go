@@ -34,3 +34,5 @@ func ReadConf() (fileCont Config, err error) {
 
 	return confCredentials, nil
 }
+
+func SetUser() {}
