@@ -30,7 +30,7 @@ func handlerLogin(s *state, cmd command) (err error) {
 		return err
 	}
 
-	fmt.Printf("User %v has been set", s.conf.CurrentUserName)
+	fmt.Printf("User %v has been set \n", s.conf.CurrentUserName)
 
 	return nil
 }

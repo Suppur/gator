@@ -3,7 +3,6 @@ package config
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"os"
 )
 
@@ -17,17 +16,17 @@ type Config struct {
 func ReadConf() (fileCont Config, err error) {
 	usrHome, err := getConfFilePath()
 	if err != nil {
-		log.Fatal(err)
+		return Config{}, err
 	}
 
 	jsonData, err := os.ReadFile(usrHome)
 	if err != nil {
-		log.Fatal(err)
+		return Config{}, err
 	}
 
 	var confCredentials Config
 	if err := json.Unmarshal(jsonData, &confCredentials); err != nil {
-		log.Fatal(err)
+		return Config{}, err
 	}
 
 	return confCredentials, nil
