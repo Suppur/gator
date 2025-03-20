@@ -6,9 +6,11 @@ import (
 	"log"
 
 	"github.com/Suppur/gator/internal/config"
+	"github.com/Suppur/gator/internal/database"
 )
 
 type state struct {
+	db   *database.Queries
 	conf *config.Config
 }
 

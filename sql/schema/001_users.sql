@@ -1,4 +1,4 @@
--- +goose up
+-- +goose Up
 CREATE TABLE users (
     id uuid PRIMARY KEY,
     created_at timestamp NOT NULL,
@@ -6,5 +6,5 @@ CREATE TABLE users (
     name varchar(255) UNIQUE NOT NULL
 );
 
--- +goose down
+-- +goose Down
 DROP TABLE users;

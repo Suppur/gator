@@ -1,19 +1,30 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"os"
 
 	"github.com/Suppur/gator/internal/config"
+	"github.com/Suppur/gator/internal/database"
+	_ "github.com/lib/pq"
 )
 
 func main() {
+
 	conf, err := config.ReadConf()
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	db, err := sql.Open("postgres", conf.DbURL)
+	if err != nil {
+		log.Fatal(err)
+	}
+	dbQueries := database.New(db)
+
 	s := state{
+		db:   dbQueries,
 		conf: &conf,
 	}
 
