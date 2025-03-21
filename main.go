@@ -10,6 +10,11 @@ import (
 	_ "github.com/lib/pq"
 )
 
+type state struct {
+	db   *database.Queries
+	conf *config.Config
+}
+
 func main() {
 
 	conf, err := config.ReadConf()
@@ -21,9 +26,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.Close()
 	dbQueries := database.New(db)
 
-	s := state{
+	s := &state{
 		db:   dbQueries,
 		conf: &conf,
 	}
@@ -32,6 +38,7 @@ func main() {
 	cmds.cmdList = make(map[string]func(*state, command) error)
 
 	cmds.register("login", handlerLogin)
+	cmds.register("register", handlerRegister)
 
 	usrInput := os.Args
 	if len(usrInput) < 2 {
@@ -43,7 +50,7 @@ func main() {
 		args: usrInput[2:],
 	}
 
-	if err := cmds.run(&s, usrCmd); err != nil {
+	if err := cmds.run(s, usrCmd); err != nil {
 		log.Fatal(err)
 	}
 
