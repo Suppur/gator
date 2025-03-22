@@ -24,7 +24,7 @@ func (c *commands) register(name string, f func(*state, command) error) {
 }
 
 func (c *commands) run(s *state, cmd command) error {
-	if cmd.name == "" || len(cmd.args) != 1 {
+	if cmd.name == "" || len(cmd.args) > 1 {
 		return errors.New("error, please enter a valid cmd name or valid cmd argument")
 	}
 
@@ -40,5 +40,3 @@ func (c *commands) run(s *state, cmd command) error {
 
 	return nil
 }
-
-func (c *commands) reset(s *state, cmd command) error { return nil }

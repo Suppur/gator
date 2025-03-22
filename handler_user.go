@@ -36,8 +36,8 @@ func handlerRegister(s *state, cmd command) (err error) {
 	}
 	dbCreateUserArgs := database.CreateUserParams{
 		ID:        uuid.New(),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		CreatedAt: time.Now().Local(),
+		UpdatedAt: time.Now().Local(),
 		Name:      cmd.args[0],
 	}
 	_, ok := s.db.GetUser(context.Background(), dbCreateUserArgs.Name)
@@ -56,6 +56,27 @@ func handlerRegister(s *state, cmd command) (err error) {
 
 	fmt.Printf("User %v was created!\n", user.Name)
 	fmt.Printf("User ID: %v \nUser created at: %v\nUser updated at: %v\nUser name: %v\n", user.ID, user.CreatedAt, user.UpdatedAt, user.Name)
+
+	return nil
+}
+
+func handlerListUsers(s *state, cmd command) (err error) {
+	usrs, err := s.db.GetUsers(context.Background())
+	if err != nil {
+		return fmt.Errorf("error listing users: %w", err)
+	}
+
+	if len(usrs) < 1 {
+		return errors.New("no users to list. register users first with the <register> command")
+	}
+
+	for _, v := range usrs {
+		if v.Name == s.conf.CurrentUserName {
+			fmt.Println("* " + v.Name + " (current)")
+		} else {
+			fmt.Println("* " + v.Name)
+		}
+	}
 
 	return nil
 }
