@@ -10,14 +10,9 @@ import (
 	"github.com/google/uuid"
 )
 
-func handlerFollow(s *state, cmd command) (err error) {
+func handlerFollow(s *state, cmd command, usr database.User) (err error) {
 	if len(cmd.args) != 1 {
 		return errors.New("please enter a URL")
-	}
-
-	usr, err := s.db.GetUser(context.Background(), s.conf.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("fetching user from DB failed %w", err)
 	}
 
 	feed, err := s.db.GetFeedByURL(context.Background(), cmd.args[0])
@@ -52,14 +47,9 @@ func handlerFollow(s *state, cmd command) (err error) {
 	return nil
 }
 
-func handlerListFollows(s *state, cmd command) (err error) {
+func handlerListFollows(s *state, cmd command, usr database.User) (err error) {
 	if len(cmd.args) != 0 {
 		return errors.New("error, the following command takes no arguments")
-	}
-
-	usr, err := s.db.GetUser(context.Background(), s.conf.CurrentUserName)
-	if err != nil {
-		return fmt.Errorf("fetching user from DB failed %w", err)
 	}
 
 	usrFeed := uuid.NullUUID{
@@ -79,6 +69,36 @@ func handlerListFollows(s *state, cmd command) (err error) {
 	}
 
 	fmt.Println("--------------------------------------------------")
+
+	return nil
+}
+
+func handlerUnfollow(s *state, cmd command, usr database.User) (err error) {
+	if len(cmd.args) != 1 {
+		return errors.New("error, the unfollow command requires the URL of the feed to unfollow")
+	}
+
+	feed, err := s.db.GetFeedByURL(context.Background(), cmd.args[0])
+	if err != nil {
+		return fmt.Errorf("failed to retrieve feed with URL provided: %w", err)
+	}
+
+	dbDeleteFeedFollowParams := database.DeleteFeedFollowByUserFeedParams{
+		UserID: uuid.NullUUID{
+			UUID:  usr.ID,
+			Valid: true,
+		},
+		FeedID: uuid.NullUUID{
+			UUID:  feed.ID,
+			Valid: true,
+		},
+	}
+
+	if err := s.db.DeleteFeedFollowByUserFeed(context.Background(), dbDeleteFeedFollowParams); err != nil {
+		return fmt.Errorf("failed to delete feed from followed feeds: %w", err)
+	}
+
+	fmt.Println("Feed successfully deleted from followed feeds!")
 
 	return nil
 }

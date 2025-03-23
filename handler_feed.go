@@ -10,14 +10,14 @@ import (
 	"github.com/google/uuid"
 )
 
-func handlerAddFeed(s *state, cmd command) (err error) {
+func handlerAddFeed(s *state, cmd command, usr database.User) (err error) {
 	if len(cmd.args) != 2 {
 		return errors.New("please enter a name and a URL")
 	}
-	usr, err := s.db.GetUser(context.Background(), s.conf.CurrentUserName)
+	/* usr, err := s.db.GetUser(context.Background(), s.conf.CurrentUserName)
 	if err != nil {
 		return fmt.Errorf("fetching user from DB failed %w", err)
-	}
+	} */
 
 	dbAddFeedArgs := database.CreateFeedParams{
 		ID:        uuid.New(),
