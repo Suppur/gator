@@ -36,6 +36,24 @@ func handlerAddFeed(s *state, cmd command) (err error) {
 		return fmt.Errorf("feed creation failed: %w", err)
 	}
 
+	dbFeedFollowParams := database.CreateFeedFollowParams{
+		ID:        uuid.New(),
+		CreatedAt: time.Now().Local(),
+		UpdatedAt: time.Now().Local(),
+		UserID: uuid.NullUUID{
+			UUID:  usr.ID,
+			Valid: true,
+		},
+		FeedID: uuid.NullUUID{
+			UUID:  feed.ID,
+			Valid: true,
+		},
+	}
+
+	if _, err := s.db.CreateFeedFollow(context.Background(), dbFeedFollowParams); err != nil {
+		return fmt.Errorf("feed follow failed: %w", err)
+	}
+
 	fmt.Printf("Feed successfully created!\n\n")
 	fmt.Printf("Feed ID: %v\n Feed created at: %v\n Feed updated at: %v\n Feed name: %v\n Feed URL: %v\n Linked user: %v\n", feed.ID, feed.CreatedAt, feed.UpdatedAt, feed.Name, feed.Url, usr.Name)
 
@@ -46,6 +64,11 @@ func handlerListFeeds(s *state, cmd command) error {
 	feeds, err := s.db.GetFeeds(context.Background())
 	if err != nil {
 		return fmt.Errorf("fetching feeds from DB failed: %w", err)
+	}
+
+	if len(feeds) == 0 {
+		fmt.Println("No feeds have been found. Add some feeds first!")
+		return nil
 	}
 
 	fmt.Println("======== Feeds: ========")
