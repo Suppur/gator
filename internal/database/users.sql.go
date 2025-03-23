@@ -104,3 +104,15 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 	}
 	return items, nil
 }
+
+const getUsersByID = `-- name: GetUsersByID :one
+SELECT name FROM users
+WHERE id = $1
+`
+
+func (q *Queries) GetUsersByID(ctx context.Context, id uuid.UUID) (string, error) {
+	row := q.db.QueryRowContext(ctx, getUsersByID, id)
+	var name string
+	err := row.Scan(&name)
+	return name, err
+}

@@ -15,5 +15,9 @@ WHERE name = $1;
 -- name: GetUsers :many
 SELECT * FROM users;
 
+-- name: GetUsersByID :one
+SELECT name FROM users
+WHERE id = $1;
+
 -- name: DeleteUsers :exec
 DELETE FROM users;
