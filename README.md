@@ -10,7 +10,7 @@ To install the gator CLI, use the `go install 'github.com/Suppur/gator'` command
 
 ### Setting up the config file
 Gator uses a JSON file to keep track of the databse url and the current user (the logged in user).
-You'll need to create a .gatorconfig.json file in your home directory (Linux).
+You'll need to create a .gatorconfig.json file in your home directory (Linux).  
 Here's the structure:
 ```json
  {
@@ -18,40 +18,40 @@ Here's the structure:
   "current_user_name": "username_goes_here"
 }
 ```
-_Note_: Make sure to add `?sslmode=disable` at the end of your db_url string.
+_Note_: Make sure to add `?sslmode=disable` at the end of your db_url string.  
 Example: `postgres://<db_username>:<db_password>@localhost:5432/gator?sslmode=disable` 
 ## Features
 You can use the following commands in the CLI;
-- *login* 
-    Login as a user
+- *login*   
+    Login as a user  
     usage: `gator login <user>`
-- *register*
-    Register a user
+- *register*  
+    Register a user  
     usage: `gator register <user>`
-- *reset*
-    Wipe the database (be careful!)
+- *reset*  
+    Wipe the database (be careful!)  
     usage: `gator reset`
-- *users*
-    List all the users from the database
+- *users*  
+    List all the users from the database  
     usage: `gator users`
-- *agg*
-    Aggregate all the posts of the feeds followed by the user following the provided interval and insert them in the database
+- *agg*  
+    Aggregate all the posts of the feeds followed by the user following the provided interval and insert them in the database  
     usage: `gator agg <delay>`
-- *addfeed*
-    Add a feed to the database
+- *addfeed*  
+    Add a feed to the database  
     usage: `gator addfeed <name> <url>`
-- *feeds*
-    Lists all the feeds added to the database
+- *feeds*  
+    Lists all the feeds added to the database  
     usage: `gator feeds`
-- *follow*
-    Follow a given feed for the current user
+- *follow*  
+    Follow a given feed for the current user  
     usage: `gator follow <url>`
-- *following*
-    List all the feeds followed by the current user
+- *following*  
+    List all the feeds followed by the current user  
     usage: `gator following`
-- *unfollow*
-    Unfollow a given feed for the current user
+- *unfollow*  
+    Unfollow a given feed for the current user  
     usage: `gator unfollow <url>`
-- *browse*
-    Browse all the posts of all the feeds. Provide a number to limit the posts displayed, default is 2.
+- *browse*  
+    Browse all the posts of all the feeds. Provide a number to limit the posts displayed, default is 2.  
     usage: `gator browse <opt:limit>`
